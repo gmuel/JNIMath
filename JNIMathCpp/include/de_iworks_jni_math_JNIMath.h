@@ -20,8 +20,24 @@ JNIEXPORT jdouble JNICALL Java_de_iworks_jni_math_JNIMath_abs
  * Method:    sqrt
  * Signature: (D)D
  */
-JNIEXPORT jdouble JNICALL Java_de_iworks_jni_math_JNIMath_sqrt
+JNIEXPORT jdouble JNICALL Java_de_iworks_jni_math_JNIMath_sqrt__D
   (JNIEnv *, jclass, jdouble);
+
+/*
+ * Class:     de_iworks_jni_math_JNIMath
+ * Method:    sqrt
+ * Signature: (DDI)D
+ */
+JNIEXPORT jdouble JNICALL Java_de_iworks_jni_math_JNIMath_sqrt__DDI
+  (JNIEnv *, jclass, jdouble, jdouble, jint);
+
+/*
+ * Class:     de_iworks_jni_math_JNIMath
+ * Method:    sqrt
+ * Signature: (DDII)D
+ */
+JNIEXPORT jdouble JNICALL Java_de_iworks_jni_math_JNIMath_sqrt__DDII
+  (JNIEnv *, jclass, jdouble, jdouble, jint, jint);
 
 #ifdef __cplusplus
 }
