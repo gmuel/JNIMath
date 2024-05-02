@@ -1,0 +1,28 @@
+!SESSION 2024-05-02 08:31:58.401 -----------------------------------------------
+eclipse.buildId=4.15.0.I20200420-1602
+java.fullversion=8.0.7.5 - pxa6480sr7fp5ifix-20220310_01(SR7 FP5+IJ37785)
+JRE 1.8.0 Linux amd64-64-Bit Compressed References 20220104_19630 (JIT enabled, AOT enabled)
+OpenJ9   - 2d4c7d9
+OMR      - 59845b7
+IBM      - 3c151c1
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=de_DE
+Framework arguments:  -showlocation -product com.ibm.etools.msgbroker.tooling.ide -application com.ibm.etools.mft.bar.cmdline.mqsicreatebar -a PrecisionJava -compileOnly -l JNIMath
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -showlocation -product com.ibm.etools.msgbroker.tooling.ide -application com.ibm.etools.mft.bar.cmdline.mqsicreatebar -data /home/fun_gab/git/JNIMath/ -a PrecisionJava -compileOnly -l JNIMath
+
+!ENTRY org.eclipse.emf.ecore 2 0 2024-05-02 08:31:59.164
+!MESSAGE Both 'com.ibm.etools.mft.fcb' and 'com.ibm.etools.mft.gef.emf' register a package for 'http://www.ibm.com/wbi/2005/eflow_utility'
+
+!ENTRY org.eclipse.emf.ecore 2 0 2024-05-02 08:31:59.165
+!MESSAGE Both 'com.ibm.etools.mft.gef.emf' and 'com.ibm.etools.mft.gef.emf' register a package for 'http://www.ibm.com/wbi/2005/eflow_utility'
+
+!ENTRY org.eclipse.emf.ecore 2 0 2024-05-02 08:31:59.165
+!MESSAGE Both 'com.ibm.etools.mft.fcb' and 'com.ibm.etools.mft.pattern.capture.annotation' register a package for 'http://www.ibm.com/patternAnnotation/2010'
+
+!ENTRY org.eclipse.emf.ecore 2 0 2024-05-02 08:31:59.166
+!MESSAGE Both 'com.ibm.etools.mft.gef.emf' and 'org.eclipse.emf.ecore' register a package for 'http://www.eclipse.org/emf/2002/Ecore'
+
+!ENTRY org.eclipse.emf.ecore 2 0 2024-05-02 08:31:59.172
+!MESSAGE Both 'com.ibm.etools.javaee.core' and 'com.ibm.etools.mft.service.model' register an extension parser for 'application'
+
+!ENTRY org.eclipse.core.resources 2 10035 2024-05-02 08:32:21.683
+!MESSAGE The workspace will exit with unsaved changes in this session.
