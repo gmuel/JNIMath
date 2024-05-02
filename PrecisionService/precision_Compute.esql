@@ -1,0 +1,106 @@
+
+DECLARE CCSID CONSTANT INTEGER 1208;
+DECLARE ENCOD CONSTANT INTEGER 546;
+CREATE COMPUTE MODULE precision_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE refIn  REFERENCE TO InputRoot;
+		DECLARE refOut REFERENCE TO OutputRoot;
+		CALL CopyMessage(refIn,refOut);
+		DECLARE intT0 INTEGER javaNanoSecs();
+		MOVE refIn TO refIn.JSON.Data;
+		IF EXISTS(refIn.Item[]) THEN
+			MOVE refIn TO refIn.Item;
+			WHILE LASTMOVE(refIn) DO
+				CALL computeSqrs(refIn);
+				MOVE refIn NEXTSIBLING REPEAT NAME;
+			END WHILE;
+		ELSE
+			CALL computeSqrs(refIn);	
+		END IF;		
+		RETURN TRUE;
+	END;
+	
+	CREATE PROCEDURE computeSqrs(INOUT refItem REFERENCE )
+	BEGIN
+		DECLARE refCp REFERENCE TO refItem;
+		DECLARE flArg FLOAT refItem.x;
+		
+		CREATE FIELD refCp.results IDENTITY (JSON.Array);
+		MOVE refCp TO refCp.results;
+		IF flArg<0.0 THEN
+			SET refCp.Item.error = 'Negative values not supported';
+			RETURN;
+		END IF;
+		SET refCp.Item.fctName = 'javaStdSqrt';
+		DECLARE intT0 INTEGER javaNanoSecs();
+		SET refCp.Item.val = javaStdSqrtSingle(flArg);
+		DECLARE intT1 INTEGER javaNanoSecs();
+		SET refCp.Item.nanoTime = intT1-intT0;
+		
+		SET refCp.Item.fctName = 'jniSqrtSingle';
+		SET intT0 = javaNanoSecs();
+		SET refCp.Item.val = jniSqrtSingle(flArg);
+		SET intT1 = javaNanoSecs();
+		SET refCp.Item.nanoTime = intT1-intT0;
+		
+		SET refCp.Item.fctName = 'jniSqrtVar_300_2';
+		SET intT0 = javaNanoSecs();
+		SET refCp.Item.val = jniSqrtVar(flArg,5e-15,300,2);
+		SET intT1 = javaNanoSecs();
+		SET refCp.Item.nanoTime = intT1-intT0;
+	END;
+END MODULE;
+CREATE PROCEDURE CopyMessage(IN InputRoot REFERENCE, INOUT OutputRoot REFERENCE) BEGIN
+	SET OutputRoot = InputRoot;
+END;
+CREATE PROCEDURE CopyMessageHeaders(IN InputRoot REFERENCE, INOUT OutputRoot REFERENCE) BEGIN
+	DECLARE I INTEGER 1;
+	DECLARE J INTEGER;
+	SET J = CARDINALITY(InputRoot.*[]);
+	WHILE I < J DO
+		SET OutputRoot.*[I] = InputRoot.*[I];
+		SET I = I + 1;
+	END WHILE;
+END;
+CREATE COMPUTE MODULE precision_Error
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE refIn  REFERENCE TO InputRoot.JSON.Data;
+		DECLARE refOut REFERENCE TO OutputRoot;
+		CALL CopyMessageHeaders(refIn,refOut);
+		CREATE LASTCHILD OF refOut DOMAIN('JSON');
+		MOVE refOut TO refOut.JSON;
+		CREATE FIELD refOut.Data IDENTITY (JSON.Object);
+		MOVE refOut TO refOut.Data;
+		CREATE FIRSTCHILD OF refOut TYPE Name NAME 'error';
+		IF EXISTS(refIn.Item[]) THEN
+			CREATE FIELD refOut.request IDENTITY (JSON.Array);
+		ELSE
+			CREATE FIELD refOut.request IDENTITY (JSON.Object);
+		END IF;
+		SET refOut.request = refIn;
+		SET refOut.error.msg = 'Precision processing ran into a grave issue and has aborted processing\nSee exception tree for further details';
+		DECLARE blobExcept BLOB CAST(ASBITSTREAM(InputExceptionList OPTIONS FolderBitStream ENCODING ENCOD CCSID CCSID) AS BLOB);
+		SET refOut.error.except = CAST(blobExcept AS CHARACTER CCSID CCSID ENCODING ENCOD);
+	END;
+END MODULE;
+
+CREATE FUNCTION javaStdSqrtSingle(IN decArg FLOAT)
+RETURNS FLOAT
+LANGUAGE JAVA
+EXTERNAL NAME "de.iworks.prec.PrecUtil.stdSqrt";
+
+CREATE FUNCTION jniSqrtSingle(IN decArg FLOAT)
+RETURNS FLOAT
+LANGUAGE JAVA
+EXTERNAL NAME "de.iworks.prec.PrecUtil.sqrt";
+CREATE FUNCTION jniSqrtVar(IN decArg FLOAT, IN decEps FLOAT, IN maxIter INTEGER, IN steepness INTEGER)
+RETURNS FLOAT
+LANGUAGE JAVA
+EXTERNal NAME "de.iworks.prec.PrecUtil.sqrt";
+
+CREATE FUNCTION javaNanoSecs()
+RETURNS INTEGER
+LANGUAGE JAVA
+EXTERNal NAME "de.iworks.prec.PrecUtil.nanoSecs";
