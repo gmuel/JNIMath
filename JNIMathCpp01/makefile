@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-cdCC=g++ -O3 -Wall -fPIC 
+CC=g++ -O3 -Wall -fPIC 
 JC=javac -h
 LN=ln -s
 INC=include/
@@ -8,7 +8,7 @@ BIN=bin/
 GIT=/home/${USER}/git/JNIMath/
 HOM=./
 JVA=$(GIT)JNIMath/src/de/iworks/jni/math/JNIMath.java
-JVH=/usr/lib/jvm/java-11-openjdk-amd64/include/
+JVH=/opt/ace-12.0.5.0/common/jdk/include/
 JVL=$(JVH)linux/
 all : $(HOM)$(LIB)libjni_math.so
 # .PHONY : $(JVA)
@@ -26,3 +26,4 @@ $(INC)de_iworks_jni_math_JNIMath.h : $(JVA)
 	$(JC) $(INC) $<
 clean :
 	rm $(LIB)*.so*
+	rm $(BIN)*.o
