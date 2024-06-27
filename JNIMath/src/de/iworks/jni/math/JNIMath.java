@@ -29,7 +29,8 @@ public class JNIMath {
 	public static native double sqrt(double x, double eps, int maxIter, int steepness);
 	
 	static {
-		System.loadLibrary("~/lib/libjni_math.so");
+//		System.loadLibrary("/home/stream/git/JNIMath/JNIMathCpp01/lib/libjni_math.so");
+		System.load("/home/stream/git/JNIMath/JNIMathCpp01/lib/libjni_math.so");
 	}
 	
 }
