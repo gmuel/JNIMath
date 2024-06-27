@@ -1,0 +1,81 @@
+openapi: 3.0.3
+info:
+  title: PrecREST
+  version: 1.0.0
+  description: Double Precision REST API
+servers:
+  - url: /precrest/v1
+paths:
+  /srqt:
+    post:
+      description: Request a precision calc
+      requestBody:
+        description: Request prec computation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrecRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrecResponse'
+        default:
+          description: Generic failure response
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/ErrorResp'
+                  
+                    
+components:
+  schemas:
+    PrecRequest:
+      type: object
+      properties:
+        x:
+          type: number
+      required:
+          - x
+    PrecRequests:
+      type: array
+      items:
+        $ref: '#/components/schemas/PrecRequest'
+    Result:
+      type: object
+      properties:
+        fctName:
+          type: string
+          description: Function name
+        val:
+          type: number
+          description: Computed valued
+        nanoTime:
+          type: number
+          description: Computation time in nanosecs
+      required:
+        - nanoTime
+        - val
+        - fctName
+    Results:
+      type: array
+      items:
+        $ref: '#/components/schemas/Result'
+    PrecResponse:
+      allOf:
+      - $ref: '#/components/schemas/PrecRequest'
+      - type: object
+        properties:
+          results:
+            $ref: '#/components/schemas/Results'
+    ErrorResp:
+      type: object
+      properties:
+        msg: 
+          type: string
+      required:
+        - msg
+        
